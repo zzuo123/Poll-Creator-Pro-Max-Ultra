@@ -1,0 +1,6 @@
+# generate basic gitignore for express app
+node_modules/
+build/
+database/
+documentation/
+*.log

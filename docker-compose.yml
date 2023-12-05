@@ -1,0 +1,12 @@
+version: '3.9'  # docker compose version
+
+services:
+  frontend:
+    build: 
+  event-bus:
+    image: event-bus
+    build:
+      context: ./event-bus
+      dockerfile: Dockerfile
+    ports:
+      - '4000:4000'
