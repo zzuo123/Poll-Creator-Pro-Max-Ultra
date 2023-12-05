@@ -1,8 +1,24 @@
 <script>
     import Option from './Option.svelte';
     import { poll_list as pl } from '$lib/store.js';    // temp fix
+    import { page } from '$app/stores';
     import api from '$lib/api.js';
     import { onMount } from 'svelte';
+    // get poll onmount from poll list store (pl)
+    let poll = {};
+    onMount (async () => {
+        const poll_id = $page.params.pollID;
+        poll = api.poll(poll_id);
+        if (poll === null) {
+            alert(`Error fetching poll with id ${poll_id}`);
+            return; // might be deleted
+        }
+        pl.update((polls) => {  // update poll list store as well
+            const idx = polls.findIndex(p => p.id === poll_id);
+            polls[idx] = poll;
+            return polls;
+        });
+    });
     function handle_vote(event) {
         const option_id = event.detail.id;
         const updatedVote = api.votes(option_id);
