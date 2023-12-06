@@ -1,27 +1,11 @@
 <script>
+    export let poll;
     import Option from './Option.svelte';
     import { poll_list as pl } from '$lib/store.js';    // temp fix
-    import { page } from '$app/stores';
-    import api from '$lib/api.js';
-    import { onMount } from 'svelte';
-    // get poll onmount from poll list store (pl)
-    let poll = {};
-    onMount (async () => {
-        const poll_id = $page.params.pollID;
-        poll = api.poll(poll_id);
-        if (poll === null) {
-            alert(`Error fetching poll with id ${poll_id}`);
-            return; // might be deleted
-        }
-        pl.update((polls) => {  // update poll list store as well
-            const idx = polls.findIndex(p => p.id === poll_id);
-            polls[idx] = poll;
-            return polls;
-        });
-    });
-    function handle_vote(event) {
+    import api from "$lib/api.js";
+    async function handle_vote(event) {
         const option_id = event.detail.id;
-        const updatedVote = api.votes(option_id);
+        const updatedVote = await api.vote(option_id);
         if (updatedVote === null) {
             alert(`Error voting for option with id ${option_id}`)
         }
@@ -29,10 +13,11 @@
             const new_polls = polls.map((p) => {
                 if (p.id === poll.id) {
                     const idx = p.options.findIndex(o => o.id === option_id);
-                    p.options[idx] = updatedVote;
+                    p.options[idx].votes = updatedVote;
                 }
                 return p;
             });
+            console.log(new_polls);
             return new_polls;
         });
     }
@@ -47,7 +32,7 @@
         <div id="poll">
             <h1>Poll: {poll.topic}</h1>
             {#each poll.options as option (option.id)}
-                <Option option={option} votes={option.votes} sum={sum} on:vote={handle_vote}/>
+                <Option option={option} sum={sum} on:vote={handle_vote}/>
             {/each}
         </div>
     {/if}

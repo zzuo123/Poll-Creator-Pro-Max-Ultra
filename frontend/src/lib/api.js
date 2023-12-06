@@ -11,7 +11,7 @@ async function createPoll(topic, options) {
         return null;
     }
     const result = await response.json();
-    return result;
+    return result.id;
 }
 
 async function getPoll(id) {

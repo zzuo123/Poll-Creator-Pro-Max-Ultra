@@ -12,13 +12,18 @@
         options = options.filter((_, index) => index !== i);
     }
     async function generatePoll() {
-        const newPoll = await api.createPoll(topic, options);
-        if (newPoll === null) {
+        const newPollID = await api.createPoll(topic, options);
+        if (newPollID === null) {
             alert("Error creating poll");
             return;
         }
-        poll_list.
-        goto("/poll/" + newPoll.id + "/");
+        const newPoll = await api.getPoll(newPollID);
+        if (newPoll === null) {
+            alert(`Error fetching new poll ${newPollID}`);
+            return;
+        }   // add new poll to poll list store
+        poll_list.update((polls) => [...polls, newPoll]);
+        goto("/poll/" + newPollID + "/");
     }
 </script>
 
