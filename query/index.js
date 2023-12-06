@@ -71,14 +71,14 @@ app.get("/polls/top/:count", async (req, res) => {
         return;
     }
     result = await result.json();
-    for (let poll of result) {
-        poll.options = await helper.convertVotes(poll.options);
-        if (poll.options.includes(null)) {
-            res.status(500).json({ message: "error retrieving votes" });
-            logger.error(`GET /polls: error retrieving votes`);
-            return;
-        }
-    }
+    // for (let poll of result) {
+    //     poll.options = await helper.convertVotes(poll.options);
+    //     if (poll.options.includes(null)) {
+    //         res.status(500).json({ message: "error retrieving votes" });
+    //         logger.error(`GET /polls: error retrieving votes`);
+    //         return;
+    //     }
+    // }
     res.json(result);
     logger.info(`GET /polls/top: Read top ${count} polls`);
 });

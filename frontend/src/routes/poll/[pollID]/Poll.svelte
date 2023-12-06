@@ -40,7 +40,7 @@
 </div>
 
 <style>
-    .centered {
+    /* .centered {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -52,5 +52,5 @@
     h1 {
         text-align: center;
         width: 100%;
-    }
+    } */
 </style>
