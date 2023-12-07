@@ -51,7 +51,7 @@
         </ul>
         <form class="d-flex" role="search">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button id="search" class="btn btn-outline-success" type="submit">Search</button>
+          <button id="search" class="btn" type="submit">Search</button>
         </form>
       </div>
     </div>
@@ -73,6 +73,9 @@
     #search{
       background-color: #212529;
       color: #ffffff;
+    }
+    #search:hover{
+      background-color: #198754;
     }
     #icon{
       width: 25px;
