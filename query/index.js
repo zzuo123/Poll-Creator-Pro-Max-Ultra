@@ -64,7 +64,7 @@ app.get("/polls/top/:count", async (req, res) => {
         logger.error(`GET /polls/top: invalid count ${count}`);
         return;
     }
-    let result = await fetch(`http://localhost:4001/polls/top/${count}`);
+    let result = await fetch(`http://localhost:4004/search/top/${count}`);
     if (result.status !== 200) {
         res.status(500).json({ message: "error retrieving polls" });
         logger.error(`GET /polls: error retrieving polls (msg: ${result.message})`);
@@ -124,6 +124,27 @@ app.put("/polls/inc/:vid", async (req, res) => {
         return;
     }
     result = await result.json();
+    res.json(result);
+});
+
+app.get("/polls/search/:term", async (req, res) => {
+    const term = req.params.term;
+    let result = await fetch(`http://localhost:4004/search/${term}`);
+    if (result.status !== 200) {
+        result = await result.json();
+        res.status(404).json({ message: `error searching for ${term}` });
+        logger.error(`GET /polls/search/${term}: error searching (msg: ${result.message})`);
+        return;
+    }
+    result = await result.json();
+    for (let poll of result) {
+        poll.options = await helper.convertVotes(poll.options);
+        if (poll.options.includes(null)) {
+            res.status(500).json({ message: "error retrieving votes" });
+            logger.error(`GET /polls: error retrieving votes`);
+            return;
+        }
+    }
     res.json(result);
 });
 

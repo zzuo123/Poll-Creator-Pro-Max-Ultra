@@ -60,7 +60,7 @@ async function deletePoll(id) {
 
 async function getTopPolls(count = 3) {
     // by default get top 3 polls
-    let result = await fetch(`http://localhost:4001/polls/top/${count}`);
+    let result = await fetch(`http://localhost:4003/polls/top/${count}`);
     if (result.status !== 200) {
         logger.error(`GET /polls: error retrieving polls (msg: ${result.message})`);
         return null;

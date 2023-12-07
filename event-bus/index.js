@@ -3,7 +3,7 @@ import morgan from 'morgan';
 import winston from 'winston';
 
 const port = process.env.PORT || 4000;
-const servicePorts = [4001, 4002];
+const servicePorts = [4001, 4002, 4004];
 
 const app = express();
 const logger = winston.createLogger({

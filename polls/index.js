@@ -12,6 +12,18 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
+const emitCreateEvent = async (newPoll) => {
+    try {
+        await fetch('http://localhost:4000/events', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'CreatePoll', data: {id: newPoll.id, topic: newPoll.topic}})
+        });
+    } catch (err) {
+        logger.error(`emitDeleteEvent error: ${err}`);
+    }
+}
+
 app.post('/polls', async (req, res) => {
     const newPoll = req.body;
     const existing = await Store.readOne(newPoll.id);
@@ -22,6 +34,7 @@ app.post('/polls', async (req, res) => {
     }
     await Store.writeOne(newPoll);
     res.json({ message: 'ok' });
+    emitCreateEvent(newPoll);
     logger.info(`POST /polls: Created poll ${newPoll.id}`);
 });
 
@@ -30,21 +43,6 @@ app.get('/polls', async (req, res) => {
     res.json(pollList);
     logger.info('GET /polls: Read all polls');
 });
-
-app.get("/polls/top/:count", async (req, res) => {
-    const count = parseInt(req.params.count);  // integer
-    const pollList = await Store.readAll();
-    const topPolls = pollList.sort((a, b) => {
-        return b.votes - a.votes;
-    }).slice(0, count);
-    // to save space, only send poll id, topic, and counts
-    const result = topPolls.map((poll) => {
-        return {id: poll.id, topic: poll.topic, votes: poll.votes}
-    });
-    res.json(result);
-    logger.info(`GET /polls/top: Read top ${count} polls`);
-});
-
 
 app.get('/polls/:id', async (req, res) => {
     const id = req.params.id;
