@@ -24,13 +24,16 @@
         poll_list.update((polls) => [...polls, newPoll]);
         goto("/poll/" + newPollID + "/");
     }
+    $: label = (topic === "") ? "New Poll" : "Topic: " + topic;
 </script>
 
 <div class="modal fade" id="create-poll-modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true" data-bs-theme="dark">
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header text-center">
-        <h3 class="modal-title ml-5" id="ModalLabel">New Poll</h3>
+      <div class="modal-header">
+        <div class="container">
+        <h3 class="modal-title text-center ml-5" id="ModalLabel">{label}</h3>
+        </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">

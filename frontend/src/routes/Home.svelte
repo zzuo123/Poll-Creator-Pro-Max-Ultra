@@ -22,7 +22,6 @@
     :root {
         --bs-body-bg-rgb: 33, 37, 41;
         --bs-primary-rgb: 13, 110, 253;
-        /* --bd-accent-rgb: 25, 135, 84; */
         --bd-accent-rgb: 255, 228, 132;
         --bd-violet-rgb: 112.520718,44.062154,249.437846;
         --bd-pink-rgb: 214,51,132;
