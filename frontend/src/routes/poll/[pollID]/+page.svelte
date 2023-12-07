@@ -6,13 +6,12 @@
     import { onMount } from 'svelte';
     import NavBar from '../../NavBar.svelte';
     import { goto } from '$app/navigation';
-    const pollID = $page.params.pollID;
+    let pollID = $page.params.pollID;
     let poll = undefined;
     pl.subscribe(polls => {
         poll = polls.find(p => p.id === pollID);
     });
-    onMount(async () => {
-        // this is ran after script tag
+    async function updatePoll() {
         const newPoll = await api.getPoll(pollID);
         if (poll === undefined) {
             pl.update((polls) => [...polls, newPoll]);
@@ -26,13 +25,25 @@
                 });
             });
         }
+        poll = newPoll;
+    }
+    onMount(async () => {
+        pollID = $page.params.pollID;
+        updatePoll();
+        // this is ran after script tag
     });
     function go_home() {
         goto("/");
     }
+    function handle_top_poll_click(event) {
+        pollID = event.detail.id;
+        poll = undefined;
+        updatePoll();
+        goto("/poll/" + event.detail.id + "/");
+    }
 </script>
 
-<NavBar />
+<NavBar on:topPollClick={handle_top_poll_click}/>
 <div class="container">
 {#if poll === undefined}
     <h1 class="text-center my-5">Fetching poll info from database...</h1>

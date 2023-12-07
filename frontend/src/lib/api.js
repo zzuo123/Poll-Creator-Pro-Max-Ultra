@@ -58,10 +58,22 @@ async function deletePoll(id) {
     return result;
 }
 
+async function getTopPolls(count = 3) {
+    // by default get top 3 polls
+    let result = await fetch(`http://localhost:4001/polls/top/${count}`);
+    if (result.status !== 200) {
+        logger.error(`GET /polls: error retrieving polls (msg: ${result.message})`);
+        return null;
+    }
+    result = await result.json();
+    return result;
+};
+
 export default {
     createPoll,
     getPoll,
     vote,
     getAllPolls,
     deletePoll,
+    getTopPolls,
 }

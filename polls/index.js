@@ -37,7 +37,11 @@ app.get("/polls/top/:count", async (req, res) => {
     const topPolls = pollList.sort((a, b) => {
         return b.votes - a.votes;
     }).slice(0, count);
-    res.json(topPolls);
+    // to save space, only send poll id and topic
+    const result = topPolls.map((poll) => {
+        return {id: poll.id, topic: poll.topic}
+    });
+    res.json(result);
     logger.info(`GET /polls/top: Read top ${count} polls`);
 });
 

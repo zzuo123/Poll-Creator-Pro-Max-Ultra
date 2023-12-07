@@ -1,5 +1,20 @@
 <script>
-    import PollCreate from "./PollCreate.svelte";
+  import PollCreate from "./PollCreate.svelte";
+  import api from '$lib/api.js';
+  import { onMount } from "svelte";
+  import { createEventDispatcher } from 'svelte';
+  const dispatch = createEventDispatcher();
+  let topPolls = [];
+  onMount(async () => {
+    console.log("getting top polls");
+    if (topPolls.length > 0) {
+      return;
+    }
+    topPolls = await api.getTopPolls(); // by default this will get the top 3 polls
+  });
+  function topPollClick(id) {
+    dispatch('topPollClick', { id });
+  }
 </script>
 
 <nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary" data-bs-theme="dark" >
@@ -22,9 +37,9 @@
               Top Polls
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              {#each topPolls as poll}
+                <li><a class="dropdown-item" href="/poll/{poll.id}" on:click={() => topPollClick(poll.id)}>{poll.topic}</a></li>
+              {/each}
             </ul>
           </li>
           <li class="nav-item">
