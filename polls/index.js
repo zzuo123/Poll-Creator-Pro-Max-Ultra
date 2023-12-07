@@ -37,9 +37,9 @@ app.get("/polls/top/:count", async (req, res) => {
     const topPolls = pollList.sort((a, b) => {
         return b.votes - a.votes;
     }).slice(0, count);
-    // to save space, only send poll id and topic
+    // to save space, only send poll id, topic, and counts
     const result = topPolls.map((poll) => {
-        return {id: poll.id, topic: poll.topic}
+        return {id: poll.id, topic: poll.topic, votes: poll.votes}
     });
     res.json(result);
     logger.info(`GET /polls/top: Read top ${count} polls`);
@@ -90,6 +90,11 @@ app.post('/events', async (req, res) => {
     if (event.type === 'IncreaseVote') {
         await Store.updateOne(event.data.id, { votes: 1 });
         logger.info(`POST /events: increased vote for poll ${event.data.id}`);
+    } else if (event.type === "UpdatedPollVotes") {
+        const updatedPollVotes = event.data.updated;
+        for (let pollId in updatedPollVotes) {
+            await Store.updateOne(pollId, { votes: updatedPollVotes[pollId] });
+        }
     }
     res.json({ message: 'ok' });
 });

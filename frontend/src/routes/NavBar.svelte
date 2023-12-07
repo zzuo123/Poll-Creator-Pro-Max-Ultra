@@ -42,7 +42,7 @@
             </a>
             <ul class="dropdown-menu">
               {#each topPolls as poll}
-                <li><a class="dropdown-item" href="/poll/{poll.id}" on:click={() => topPollClick(poll.id)}>{poll.topic}</a></li>
+                <li><a class="dropdown-item" href="/poll/{poll.id}" on:click={() => topPollClick(poll.id)}>{poll.topic} ({poll.votes})</a></li>
               {/each}
             </ul>
           </li>

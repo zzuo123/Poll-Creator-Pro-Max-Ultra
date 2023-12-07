@@ -8,6 +8,9 @@ const port = process.env.PORT || 4002;
 
 const app = express();
 
+let updatedPollVotes = {};  // cache and send later
+let votesUpdated = false;   // has updatedPollVotes been updated?
+
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
@@ -37,22 +40,6 @@ app.get('/votes/:id', async (req, res) => {
     logger.info(`GET /votes/${id}: Read vote ${id}`);
 });
 
-const emitIncreaseVoteEvent = async (pollId) => {
-    try {
-        await fetch('http://localhost:4000/events', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                type: 'IncreaseVote',
-                data: { id: pollId },
-            }),
-        });
-        logger.info(`emitIncreaseVoteEvent: emitted IncreaseVote event for poll ${pollId}`);
-    } catch (err) {
-        logger.error(`emitIncreaseVoteEvent error: ${err}`);
-    }
-};
-
 app.put('/votes/inc/:id', async (req, res) => {
     // increment the vote by 1
     const id = req.params.id;
@@ -65,7 +52,12 @@ app.put('/votes/inc/:id', async (req, res) => {
     await Store.updateOne(id, { votes: 1});   // increment by 1
     vote = await Store.readOne(id); // read the updated vote (there might be concurrent updates)
     res.json(vote);
-    emitIncreaseVoteEvent(vote.pollId);
+    if (!updatedPollVotes[vote.pollId]) {
+        updatedPollVotes[vote.pollId] = 1;
+    } else {
+        updatedPollVotes[vote.pollId] += 1;
+    }
+    votesUpdated = true;
     logger.info(`PUT /votes/${id}: Updated vote ${id} to ${vote.votes} votes`);
 });
 
@@ -78,6 +70,36 @@ app.post('/events', async (req, res) => {
     }
     res.json({ message: 'ok' });
 });
+
+// send updated poll votes to query service if updated every second (ddos protection)
+async function sendUpdatedPollVotes() {
+    if (!votesUpdated) {
+        return; // only send if there are updates
+    }
+    try {
+        let result = await fetch('http://localhost:4000/events', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                type: 'UpdatedPollVotes',
+                data: { updated: updatedPollVotes},
+            }),
+        });
+        result = await result.json();
+        if (result.message=== 'ok') {
+            updatedPollVotes = {};
+            votesUpdated = false;
+            logger.info(`sendUpdatePolls: emitted UpdatePolls event`);
+        } else {
+            logger.error(`sendUpdatePolls: error sending UpdatePolls event`);
+        }
+    } catch (err) {
+        logger.error(`sendUpdatePolls error: ${err}`);
+    }
+}
+
+setInterval(sendUpdatedPollVotes, 1000);    // check and send vote update every second
+
 
 app.listen(port, () => {
     logger.info(`Listening on port ${port}`);

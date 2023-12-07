@@ -38,7 +38,7 @@ app.post('/events', async (req, res) => {
       logger.error(`Event Bus (Error Sending Event to ${port}) ${event.type} ${err}`);
     }
   }
-  res.send({ status: 'OK' });
+  res.send({ message : 'ok' });
 });
 
 app.listen(port, () => {
