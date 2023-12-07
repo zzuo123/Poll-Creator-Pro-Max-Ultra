@@ -3,14 +3,13 @@
   import api from '$lib/api.js';
   import { onMount } from "svelte";
   import { createEventDispatcher } from 'svelte';
-  import Icon from '$lib/assets/icon.svg';
   const dispatch = createEventDispatcher();
   let topPolls = [];
   onMount(async () => {
     console.log("getting top polls");
     if (topPolls.length > 0) {
       return;
-    }
+    } // this is expensive operation on the server, only do it when reload
     topPolls = await api.getTopPolls(); // by default this will get the top 3 polls
   });
   function topPollClick(id) {
