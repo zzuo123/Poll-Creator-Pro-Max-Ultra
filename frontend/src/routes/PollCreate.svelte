@@ -26,7 +26,7 @@
     }
 </script>
 
-<div class="modal fade" id="create-poll-modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+<div class="modal fade" id="create-poll-modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true" data-bs-theme="dark">
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -58,7 +58,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" on:click={generatePoll}>Generate Poll</button>
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" on:click={generatePoll}>Generate Poll</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>

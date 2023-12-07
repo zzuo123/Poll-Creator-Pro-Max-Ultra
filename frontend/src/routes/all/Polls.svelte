@@ -1,48 +1,35 @@
 <script>
     import { poll_list as pl } from '$lib/store.js';
-    export let header = "All Polls";
+    import { onMount } from 'svelte';
+    import Card from './Card.svelte';
+    import api from '$lib/api.js';
+    export let header = "All polls posted by all users:";
     let polls;
+    onMount (async () => {
+        const all_polls = await api.getAllPolls();
+        pl.set(all_polls);
+    });
     pl.subscribe(value => {
         polls = value;
     });
-    function delete_poll(id) {
+    async function delete_poll(id) {
+        const result = await api.deletePoll(id);
+        console.log(result);
+        if (result === null) {
+            alert("Error deleting poll");
+            return;
+        }
         pl.update(value => {
             return value.filter(poll => poll.id !== id);
         });
     }
 </script>
 
-<h2>{header}</h2>
-<div id="polls">
-    <table>
-        <tr><th>Poll #</th><th>Topic</th><th>Delete</th></tr>
-        {#each polls as poll, i}
-        <tr>
-            <td>{i+1}</td>
-            <td><a class="poll_list" href="/poll/{poll.id}/">{poll.topic}</a></td>
-            <td><button on:click={() => delete_poll(poll.id)} class="delete-btn">🗑️</button></td>
-        </tr>
-        {/each}
-    </table>
+<div class="container">
+    <h2 class="text-center mt-5 mb-5">{header}</h2>
+    <div class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+    {#each polls as poll, i}
+        <Card poll={poll}/>
+    {/each}
+    </div>
 </div>
-
-<style>
-    table {
-        border-collapse: collapse;
-        border: 1px solid black;
-    }
-    table > tr > td {
-        border: 1px solid black;
-        padding: 0.5em;
-    }
-    table > tr > th{
-        border: 1px solid black;
-        padding: 0.5em;
-    }
-    .delete-btn {
-        background: none;
-        border: none;
-        font-size: 1.5em;
-        cursor: pointer;
-    }
-</style>

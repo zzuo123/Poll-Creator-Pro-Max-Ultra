@@ -38,8 +38,30 @@ async function vote(vid) {
     return votes;
 }
 
+async function getAllPolls() {
+    const response = await fetch("http://localhost:4003/polls/all");
+    if (response.status !== 200) {
+        return null;
+    }
+    const result = await response.json();
+    return result;
+}
+
+async function deletePoll(id) {
+    const response = await fetch(`http://localhost:4003/polls/${id}`, {
+        method: "DELETE",
+    });
+    if (response.status !== 200) {
+        return null;
+    }
+    const result = await response.json();
+    return result;
+}
+
 export default {
     createPoll,
     getPoll,
     vote,
+    getAllPolls,
+    deletePoll,
 }

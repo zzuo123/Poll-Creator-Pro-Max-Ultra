@@ -32,7 +32,7 @@
         background-image: linear-gradient(left, #039be5, #039be5 var(--wid), transparent var(--wid), transparent 100%);
         background-image: -webkit-linear-gradient(left, #039be5, #039be5 var(--wid), transparent var(--wid), transparent 100%)  
     }
-    /* button:hover {
+    button:hover {
         cursor: pointer;
     }
     #option-text {
@@ -45,5 +45,5 @@
     }
     #opt {
         font-size: 1.2em;
-    } */
+    }
 </style>
