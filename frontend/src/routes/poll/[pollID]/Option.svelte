@@ -28,6 +28,7 @@
         border: none;
 	    padding: 0.5em 1em;
         outline: none;
+        /* I got the idea from these two posts, and chose the color using a color picker. */
         /* https://stackoverflow.com/questions/17353449/i-want-to-add-a-background-color-only-to-part-of-my-div */
         /* https://stackoverflow.com/questions/57174373/can-i-set-svelte-style-css-attribute-values-using-variables-passed-in-to-a-compo */
         background-image: linear-gradient(left, #039be5, #039be5 var(--wid), transparent var(--wid), transparent 100%);
