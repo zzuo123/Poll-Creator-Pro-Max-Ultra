@@ -1,4 +1,5 @@
 <script>
+    // frontend/src/routes/poll/[pollID]/Option.svelte
     import { createEventDispatcher } from 'svelte';
     export let option;
     export let sum;

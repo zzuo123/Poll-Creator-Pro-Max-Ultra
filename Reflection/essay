@@ -1,0 +1,21 @@
+
+Application Idea
+
+Please provide us with a thoughtful 600-word essay of the description of your project.
+
+    What did you design and implement?
+    Why did you choose the domain you did?
+    Why is your application interesting and why would someone use it?
+    Why would your application need to scale?
+
+
+
+My project is called Poll Creator Pro Max Ultra. It allows users to create polls and have other users vote on the different options in the polls. It's the one-stop shop for all the poll creation and storing needs. The application have a home page that introduces the main functionality of the application, as well as a button to create a new poll. On the nav bar, there are four links. Home, which brings the user to the application homepage. All polls, which brings the user to a page with all the polls created on this website, where they can subsequently view and vote on them, as well as delete the poll. There is also Top Polls, which is a dropdown containing links to the polls with the most votes (most popular ones). Then there is Create Poll, which activates a Bootstrap modal that allows user to create a new poll. Lastly there is a search bar that allows user to search for a poll using keyword.
+
+I chose this domain because I wanted to create a web application that would be useful to people. Personally, I like a simple website that does one thing and does it well. Currently there are other websites that allow users to create polls, but they are either too simple and ugly or over complicated. My application is simple and easy to use, but also has a nice design. It is also very easy to create a poll, and the user can create a poll without having to sign up for an account. It is also easy for user to view, vote, and delete the polls. 
+
+My application is interesting because it allows users to create polls and vote on them. Currently I didn't cap the maximum number of times that people can vote on an option in a vote, because there isn't really any way to know if two different votes came from the same person. However, this makes the application interesting because they can create "fake polls" where they vote on one option many times as a joke. 
+
+This application would need to scale because it needs to hold all the polls created by users, it also need to serve multiple users at the same time. I have engineered the backend services so that the polls and the vote/options are stored separately. This is because while the poll itself is mostly static, the votes and options needs to update a lot more often. If we store them together, then we would have to update the entire poll every time someone votes, which would be inefficient. By storing them separately, we can update the votes and options without having to involve the poll itself. This would make the application more scalable. As a result, the polls service mainly serves the poll creation and deletion, while the votes service create the vote option and update the vote counts. They communicate over event-bus since a poll deletion would trigger the vote service to delete the associate votes and options. The vote service also update the poll service on the vote counts of the polls, where it stores the update in a buffer and check for updates of the buffer every second using setInterval, and sends the update to the poll service if there is any. This is to prevent the poll service from being overwhelmed by the number of updates. Then there is also the search service, which connects to the poll database and has an endpoint for searching for polls that contains user specified keywords, and an endpoint for getting the top polls by vote count. These are the computational intensive services, so I separated them from the poll service. Lastly there is the query service, which is the services that the frontend/client talks to. It has endpoints specifically designed to get the information that the frontend need from the other services and combine them into a usable format for the frontend. This is to prevent the frontend from having to talk to multiple services to get the information it needs, which would be inefficient. All these services work together to make the application scalable.
+
+

@@ -1,3 +1,4 @@
+// frontend/src/lib/api.js
 // handle backend api calls
 async function createPoll(topic, options) {
     const response = await fetch("http://query:4003/polls", {

@@ -1,4 +1,5 @@
 <script>
+    // frontend/src/routes/search/[term]/+page.svelte
     import { page } from '$app/stores'
     import Polls from './Polls.svelte';
     import NavBar from '../../NavBar.svelte';
