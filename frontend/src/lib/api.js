@@ -1,7 +1,7 @@
 // frontend/src/lib/api.js
 // handle backend api calls
 async function createPoll(topic, options) {
-    const response = await fetch("http://query:4003/polls", {
+    const response = await fetch("http://localhost:4003/polls", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -16,7 +16,7 @@ async function createPoll(topic, options) {
 }
 
 async function getPoll(id) {
-    const response = await fetch(`http://query:4003/polls/${id}`);
+    const response = await fetch(`http://localhost:4003/polls/${id}`);
     if (response.status !== 200) {
         return null;
     }
@@ -25,7 +25,7 @@ async function getPoll(id) {
 }
 
 async function vote(vid) {
-    const response = await fetch(`http://query:4003/polls/inc/${vid}`, {
+    const response = await fetch(`http://localhost:4003/polls/inc/${vid}`, {
         method: "PUT",
     });
     if (response.status !== 200) {
@@ -40,7 +40,7 @@ async function vote(vid) {
 }
 
 async function getAllPolls() {
-    const response = await fetch("http://query:4003/polls/all");
+    const response = await fetch("http://localhost:4003/polls/all");
     if (response.status !== 200) {
         return null;
     }
@@ -49,7 +49,7 @@ async function getAllPolls() {
 }
 
 async function deletePoll(id) {
-    const response = await fetch(`http://query:4003/polls/${id}`, {
+    const response = await fetch(`http://localhost:4003/polls/${id}`, {
         method: "DELETE",
     });
     if (response.status !== 200) {
@@ -61,7 +61,7 @@ async function deletePoll(id) {
 
 async function getTopPolls(count = 3) {
     // by default get top 3 polls
-    let result = await fetch(`http://query:4003/polls/top/${count}`);
+    let result = await fetch(`http://localhost:4003/polls/top/${count}`);
     if (result.status !== 200) {
         logger.error(`GET /polls: error retrieving polls (msg: ${result.message})`);
         return null;
@@ -71,7 +71,7 @@ async function getTopPolls(count = 3) {
 };
 
 async function searchPolls(term) {
-    let result = await fetch(`http://query:4003/polls/search/${term}`);
+    let result = await fetch(`http://localhost:4003/polls/search/${term}`);
     if (result.status !== 200) {
         logger.error(`GET /polls: error retrieving polls (msg: ${result.message})`);
         return null;

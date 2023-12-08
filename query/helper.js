@@ -1,3 +1,5 @@
+import logger from "./logger.js";
+
 const checkFields = (obj, fieldsList) => {
     // check if obj has all fields in fieldsList and only those fields
     if(Object.keys(obj).length !== fieldsList.length) {
