@@ -37,8 +37,3 @@
     </div>
   </div>
 </div>
-  
-
-<!-- <p>{i+1}</p>
-<p><a class="poll_list" href="/poll/{poll.id}/">{poll.topic}</a></p>
-<button on:click={async () => await delete_poll(poll.id)} class="delete-btn">🗑️</button> -->
