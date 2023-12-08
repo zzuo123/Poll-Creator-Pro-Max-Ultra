@@ -69,6 +69,16 @@ async function getTopPolls(count = 3) {
     return result;
 };
 
+async function searchPolls(term) {
+    let result = await fetch(`http://localhost:4003/polls/search/${term}`);
+    if (result.status !== 200) {
+        logger.error(`GET /polls: error retrieving polls (msg: ${result.message})`);
+        return null;
+    }
+    result = await result.json();
+    return result;
+}
+
 export default {
     createPoll,
     getPoll,
@@ -76,4 +86,5 @@ export default {
     getAllPolls,
     deletePoll,
     getTopPolls,
+    searchPolls,
 }

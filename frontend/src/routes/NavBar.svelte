@@ -3,8 +3,10 @@
   import api from '$lib/api.js';
   import { onMount } from "svelte";
   import { createEventDispatcher } from 'svelte';
+  import { goto } from '$app/navigation';
   const dispatch = createEventDispatcher();
   let topPolls = [];
+  let searchTerm = "";
   onMount(async () => {
     console.log("getting top polls");
     if (topPolls.length > 0) {
@@ -14,6 +16,14 @@
   });
   function topPollClick(id) {
     dispatch('topPollClick', { id });
+  }
+  function search(e) {
+    e.preventDefault();
+    if (searchTerm === "") {
+      return;
+    }
+    dispatch('search', { searchTerm });
+    goto(`/search/${searchTerm}`);
   }
 </script>
 
@@ -50,8 +60,8 @@
           </li>
         </ul>
         <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button id="search" class="btn" type="submit">Search</button>
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" bind:value={searchTerm}>
+          <button id="search" class="btn" type="submit" on:click={search}>Search</button>
         </form>
       </div>
     </div>

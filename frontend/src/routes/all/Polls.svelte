@@ -1,7 +1,7 @@
 <script>
     import { poll_list as pl } from '$lib/store.js';
     import { onMount } from 'svelte';
-    import Card from './Card.svelte';
+    import Card from '../Card.svelte';
     import api from '$lib/api.js';
     export let header = "All polls posted by all users:";
     let polls;
@@ -12,17 +12,6 @@
     pl.subscribe(value => {
         polls = value;
     });
-    async function delete_poll(id) {
-        const result = await api.deletePoll(id);
-        console.log(result);
-        if (result === null) {
-            alert("Error deleting poll");
-            return;
-        }
-        pl.update(value => {
-            return value.filter(poll => poll.id !== id);
-        });
-    }
 </script>
 
 <div class="container">

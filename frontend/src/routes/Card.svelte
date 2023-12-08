@@ -2,7 +2,9 @@
     import { goto } from '$app/navigation';
     import { poll_list as pl } from '$lib/store.js';
     import api from '$lib/api.js';
+    import { createEventDispatcher } from 'svelte';
     export let poll;
+    const dispatch = createEventDispatcher();
     async function delete_poll() {
         const result = await api.deletePoll(poll.id);
         console.log(result);
@@ -13,6 +15,7 @@
         pl.update(value => {
             return value.filter(p => p.id !== poll.id);
         });
+        dispatch('delete_poll', { id: poll.id });
     }
     function view_poll() {
         goto("/poll/" + poll.id + "/");
