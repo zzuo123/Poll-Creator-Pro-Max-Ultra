@@ -71,7 +71,7 @@ app.post('/events', async (req, res) => {
     res.json({ message: 'ok' });
 });
 
-// send updated poll votes to query service if updated every second (ddos protection)
+// send updated poll votes to query service if updated every second (ddos prevention)
 async function sendUpdatedPollVotes() {
     if (!votesUpdated) {
         return; // only send if there are updates

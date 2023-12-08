@@ -12,18 +12,6 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
-const emitCreateEvent = async (newPoll) => {
-    try {
-        await fetch('http://localhost:4000/events', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ type: 'CreatePoll', data: {id: newPoll.id, topic: newPoll.topic}})
-        });
-    } catch (err) {
-        logger.error(`emitDeleteEvent error: ${err}`);
-    }
-}
-
 app.post('/polls', async (req, res) => {
     const newPoll = req.body;
     const existing = await Store.readOne(newPoll.id);
@@ -34,7 +22,6 @@ app.post('/polls', async (req, res) => {
     }
     await Store.writeOne(newPoll);
     res.json({ message: 'ok' });
-    emitCreateEvent(newPoll);
     logger.info(`POST /polls: Created poll ${newPoll.id}`);
 });
 
@@ -85,10 +72,7 @@ app.delete('/polls/:id', async (req, res) => {
 app.post('/events', async (req, res) => {
     const event = req.body;
     logger.info(`POST /events: received event ${event.type}`);
-    if (event.type === 'IncreaseVote') {
-        await Store.updateOne(event.data.id, { votes: 1 });
-        logger.info(`POST /events: increased vote for poll ${event.data.id}`);
-    } else if (event.type === "UpdatedPollVotes") {
+    if (event.type === "UpdatedPollVotes") {
         const updatedPollVotes = event.data.updated;
         for (let pollId in updatedPollVotes) {
             await Store.updateOne(pollId, { votes: updatedPollVotes[pollId] });
