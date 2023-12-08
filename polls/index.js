@@ -45,7 +45,7 @@ app.get('/polls/:id', async (req, res) => {
 
 const emitDeleteEvent = async (id) => {
     try {
-        await fetch('http://localhost:4000/events', {
+        await fetch('http://event-bus:4000/events', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type: 'DeletePoll', data: { id } })

@@ -77,7 +77,7 @@ async function sendUpdatedPollVotes() {
         return; // only send if there are updates
     }
     try {
-        let result = await fetch('http://localhost:4000/events', {
+        let result = await fetch('http://event-bus:4000/events', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

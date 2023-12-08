@@ -4,6 +4,7 @@
   import { onMount } from "svelte";
   import { createEventDispatcher } from 'svelte';
   import { goto } from '$app/navigation';
+  import { poll_list as pl } from '$lib/store.js';
   const dispatch = createEventDispatcher();
   let topPolls = [];
   let searchTerm = "";
@@ -25,6 +26,16 @@
     dispatch('search', { searchTerm });
     goto(`/search/${searchTerm}`);
   }
+  pl.subscribe(async (value) => {
+    // get top polls again if one of the polls is deleted
+    const all_poll_ids = value.map((poll) => poll.id);
+    const top_poll_ids = topPolls.map((poll) => poll.id);
+    const deleted_poll_id = top_poll_ids.filter((id) => !all_poll_ids.includes(id));
+    if (deleted_poll_id.length > 0) {
+      console.log("One of the top polls is deleted, getting top polls again");
+      topPolls = await api.getTopPolls();
+    }
+  });
 </script>
 
 <nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary" data-bs-theme="dark" >

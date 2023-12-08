@@ -24,7 +24,7 @@ const createVotes = async (pollId, options) => {
             votes: 0,
             pollId,
         };
-        let result = await fetch("http://localhost:4002/votes", {
+        let result = await fetch("http://votes:4002/votes", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(newVote),
@@ -47,7 +47,7 @@ const createPoll = async (poll) => {
         logger.error("POST /polls: error creating poll");
         return null;
     }
-    let result = await fetch("http://localhost:4001/polls", {
+    let result = await fetch("http://polls:4001/polls", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -66,7 +66,7 @@ const createPoll = async (poll) => {
 
 const convertVotes = async (options) => {
     return await Promise.all(options.map(async (option) => {
-        let vote = await fetch(`http://localhost:4002/votes/${option}`);
+        let vote = await fetch(`http://votes:4002/votes/${option}`);
         if (vote.status !== 200) {
             logger.error(`GET /polls: error retrieving vote (msg: ${vote.message})`);
             return null;

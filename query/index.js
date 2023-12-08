@@ -37,7 +37,7 @@ app.post("/polls", async (req, res) => {
 });
 
 app.get("/polls/all", async (req, res) => {
-    let result = await fetch("http://localhost:4001/polls");
+    let result = await fetch("http://polls:4001/polls");
     if (result.status !== 200) {
         res.status(500).json({ message: "error retrieving polls" });
         logger.error(`GET /polls: error retrieving polls (msg: ${result.message})`);
@@ -64,7 +64,7 @@ app.get("/polls/top/:count", async (req, res) => {
         logger.error(`GET /polls/top: invalid count ${count}`);
         return;
     }
-    let result = await fetch(`http://localhost:4004/search/top/${count}`);
+    let result = await fetch(`http://search:4004/search/top/${count}`);
     if (result.status !== 200) {
         res.status(500).json({ message: "error retrieving polls" });
         logger.error(`GET /polls: error retrieving polls (msg: ${result.message})`);
@@ -77,7 +77,7 @@ app.get("/polls/top/:count", async (req, res) => {
 
 app.delete("/polls/:id", async (req, res) => {
     const id = req.params.id;
-    let result = await fetch(`http://localhost:4001/polls/${id}`, {
+    let result = await fetch(`http://polls:4001/polls/${id}`, {
         method: "DELETE",
     });
     result = await result.json();
@@ -93,7 +93,7 @@ app.delete("/polls/:id", async (req, res) => {
 app.get("/polls/:id", async (req, res) => {
     // return specific poll with vote information
     const id = req.params.id;
-    let result = await fetch(`http://localhost:4001/polls/${id}`);
+    let result = await fetch(`http://polls:4001/polls/${id}`);
     if (result.status !== 200) {
         result = await result.json();
         res.status(404).json({ message: result.message });
@@ -114,7 +114,7 @@ app.get("/polls/:id", async (req, res) => {
 app.put("/polls/inc/:vid", async (req, res) => {
     // increment vote with id vid
     const vid = req.params.vid;
-    let result = await fetch(`http://localhost:4002/votes/inc/${vid}`, {
+    let result = await fetch(`http://votes:4002/votes/inc/${vid}`, {
         method: "PUT",
     });
     if (result.status !== 200) {
@@ -129,7 +129,7 @@ app.put("/polls/inc/:vid", async (req, res) => {
 
 app.get("/polls/search/:term", async (req, res) => {
     const term = req.params.term;
-    let result = await fetch(`http://localhost:4004/search/${term}`);
+    let result = await fetch(`http://search:4004/search/${term}`);
     if (result.status !== 200) {
         result = await result.json();
         res.status(404).json({ message: `error searching for ${term}` });

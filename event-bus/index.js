@@ -3,7 +3,11 @@ import morgan from 'morgan';
 import winston from 'winston';
 
 const port = process.env.PORT || 4000;
-const servicePorts = [4001, 4002, 4004];
+const servicePorts = [
+  { name: "polls", port: 4001 },
+  { name: "votes", port: 4002 },
+  { name: "search", port: 4004}
+];
 
 const app = express();
 const logger = winston.createLogger({
@@ -25,11 +29,10 @@ app.use(express.json());
 app.post('/events', async (req, res) => {
   const event = req.body;
   logger.info(`Event Bus (Received Event) ${event.type}`);
-  for (const port of servicePorts) {
+  for (const { name, port } of servicePorts) {
     try {
       logger.info(`Event Bus (Sending Event to ${port}) ${event.type}`);
-
-      await fetch(`http://localhost:${port}/events`, {
+      await fetch(`http://${name}:${port}/events`, {
         method: 'POST',
         body: JSON.stringify(event),
         headers: { 'Content-Type': 'application/json' },

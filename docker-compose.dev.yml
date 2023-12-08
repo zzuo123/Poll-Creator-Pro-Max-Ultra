@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  frontend:
+    build: frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/usr/app
+      - /usr/app/node_modules
+      - /usr/app/build
+  event-bus:
+    build: event-bus
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./event-bus:/usr/app
+      - /usr/app/node_modules
+  polls:
+    build: polls
+    ports:
+      - "4001:4001"
+    volumes:
+      - ./polls:/usr/app
+      - /usr/app/node_modules
+  votes:
+    build: votes
+    ports:
+      - "4002:4002"
+    volumes:
+      - ./votes:/usr/app
+      - /usr/app/node_modules
+  query:
+    build: query
+    ports:
+      - "4003:4003"
+    volumes:
+      - ./query:/usr/app
+      - /usr/app/node_modules
+  search:
+    build: search
+    ports:
+      - "4004:4004"
+    volumes:
+      - ./search:/usr/app
+      - /usr/app/node_modules
+  mongodb:
+    image: mongo:latest
+    volumes:
+      - mongodb-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+
+volumes:
+  mongodb-data:

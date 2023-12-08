@@ -2,8 +2,8 @@ import { MongoClient } from "mongodb";
 import logger from "./logger.js";
 
 // change to this to run inside of docker container
-// const url = 'mongodb://admin:password@mongodb:27017';
-const url = 'mongodb://admin:password@localhost:27017';
+const url = 'mongodb://admin:password@mongodb:27017';
+// const url = 'mongodb://admin:password@localhost:27017';
 const client = new MongoClient(url);
 const dbName = 'polls';
 

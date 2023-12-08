@@ -26,7 +26,7 @@
   "scripts": {
     "dev": "nodemon index.js --watch index.js --watch store.js --watch logger.js",
     "start": "pm2 start index.js --name votes-service -i 5",
-    "docker-start": "pm2-runtime start index.js --name votes-service -i 1",
+    "docker-start": "pm2-runtime start index.js --name votes-service -i 5",
     "stop": "pm2 delete votes-service"
   },
   "dependencies": {

@@ -1,12 +1,39 @@
 version: '3.9'  # docker compose version
 
 services:
+  mongodb:
+    image: mongo:latest
+    volumes:
+      - mongodb-data:/data/db
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
   frontend:
-    build: 
+    build: frontend
+    ports:
+      - '3000:3000'
   event-bus:
-    image: event-bus
-    build:
-      context: ./event-bus
-      dockerfile: Dockerfile
+    build: event-bus
     ports:
       - '4000:4000'
+  polls:
+    build: polls
+    ports:
+      - '4001:4001'
+  votes:
+    build: votes
+    ports:
+      - '4002:4002'
+  query:
+    build: query
+    ports:
+      - '4003:4003'
+  search:
+    build: search
+    ports:
+      - '4004:4004'
+
+volumes:
+  mongodb-data:
